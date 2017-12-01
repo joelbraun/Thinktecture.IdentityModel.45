@@ -107,11 +107,12 @@ namespace Thinktecture.IdentityModel.Clients
             var parameters = new TokenValidationParameters
             {
                 ValidIssuer = issuer,
-                AllowedAudience = audience,
-                SigningToken = new X509SecurityToken(signingCertificate)
+                ValidAudience = audience,
+                IssuerSigningToken = new X509SecurityToken(signingCertificate)
             };
 
-            return handler.ValidateToken(token, parameters).Claims;
+            SecurityToken validatedToken;
+            return handler.ValidateToken(token, parameters, out validatedToken).Claims;
         }
 
         public async static Task<IEnumerable<Claim>> GetUserInfoClaimsAsync(Uri userInfoEndpoint, string accessToken)

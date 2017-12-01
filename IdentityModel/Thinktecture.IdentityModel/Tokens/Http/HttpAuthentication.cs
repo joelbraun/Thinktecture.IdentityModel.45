@@ -145,8 +145,8 @@ namespace Thinktecture.IdentityModel.Tokens.Http
                             var validationParameters = new TokenValidationParameters
                             {
                                 ValidIssuer = Configuration.SessionToken.IssuerName,
-                                AllowedAudience = Configuration.SessionToken.Audience,
-                                SigningToken = new BinarySecretSecurityToken(Configuration.SessionToken.SigningKey),
+                                ValidAudience = Configuration.SessionToken.Audience,
+                                IssuerSigningToken = new BinarySecretSecurityToken(Configuration.SessionToken.SigningKey),
                             };
 
                             // Create provider to ensure that CrptoHelper.GetIdentityFromConfig has
@@ -156,7 +156,9 @@ namespace Thinktecture.IdentityModel.Tokens.Http
                             rsaKey.IsSupportedAlgorithm(token.SignatureAlgorithm);
 
                             var handler = new JwtSecurityTokenHandler();
-                            return handler.ValidateToken(token, validationParameters);
+
+                            SecurityToken validToken;
+                            return handler.ValidateToken(token.ToString(), validationParameters, out validToken);
                         }
                     }
                 }
@@ -283,7 +285,8 @@ namespace Thinktecture.IdentityModel.Tokens.Http
                 issuer: Configuration.SessionToken.IssuerName,
                 audience: Configuration.SessionToken.Audience,
                 claims: claims,
-                lifetime: new Lifetime(DateTime.UtcNow, DateTime.UtcNow.Add(Configuration.SessionToken.DefaultTokenLifetime)),
+                notBefore: DateTime.UtcNow,
+                expires: DateTime.UtcNow.Add(Configuration.SessionToken.DefaultTokenLifetime),
                 signingCredentials: new HmacSigningCredentials(Configuration.SessionToken.SigningKey));
 
             var handler = new JwtSecurityTokenHandler();

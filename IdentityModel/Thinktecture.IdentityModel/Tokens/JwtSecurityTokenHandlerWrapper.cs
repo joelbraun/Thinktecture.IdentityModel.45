@@ -26,7 +26,8 @@ namespace Thinktecture.IdentityModel.Tokens
         public override System.Collections.ObjectModel.ReadOnlyCollection<System.Security.Claims.ClaimsIdentity> ValidateToken(SecurityToken token)
         {
             var jwt = token as JwtSecurityToken;
-            var list = new List<ClaimsIdentity>(this.ValidateToken(jwt, validationParams).Identities);
+            SecurityToken validToken;
+            var list = new List<ClaimsIdentity>(this.ValidateToken(jwt.ToString(), validationParams, out validToken).Identities);
             return list.AsReadOnly();
         }
 
