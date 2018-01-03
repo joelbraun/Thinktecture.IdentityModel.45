@@ -27,7 +27,7 @@ namespace Thinktecture.IdentityModel.Tokens.Http
         {
             var principal = _transfomer.Authenticate(request.RequestUri.AbsoluteUri, ClaimsPrincipal.Current);
 
-            Thread.CurrentPrincipal = principal;
+            request.GetRequestContext().Principal = principal;
 
             if (HttpContext.Current != null)
             {

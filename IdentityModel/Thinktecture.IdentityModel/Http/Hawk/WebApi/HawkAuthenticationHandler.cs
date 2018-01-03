@@ -44,7 +44,7 @@ namespace Thinktecture.IdentityModel.Http.Hawk.WebApi
 
                 if (principal != null && principal.Identity.IsAuthenticated)
                 {
-                    Thread.CurrentPrincipal = principal;
+                    request.GetRequestContext().Principal = principal;
 
                     if (HttpContext.Current != null)
                         HttpContext.Current.User = principal;

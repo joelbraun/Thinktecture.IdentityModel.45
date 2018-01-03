@@ -197,8 +197,7 @@ namespace Thinktecture.IdentityModel.Tokens.Http
             {
                 Tracing.Verbose("Setting anonymous principal.");
             }
-
-            Thread.CurrentPrincipal = principal;
+            request.GetRequestContext().Principal = principal;
 
             if (HttpContext.Current != null)
             {
